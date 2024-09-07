@@ -9,7 +9,7 @@ output: html_document
 Inicialmente, se procede a leer la base de datos necesaria.
 
 ```{r base_datos}
-library(readr)
-BaseSalarios <- readxl::read_excel("Tarea 1/BaseSalarios.xlsx")
+library(readxl)
+BaseSalarios <- read_excel("Tarea 1/BaseSalarios.xlsx")
 ```
 
