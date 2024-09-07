@@ -10,6 +10,13 @@ Inicialmente, se procede a leer la base de datos necesaria.
 
 ```{r base_datos}
 library(readxl)
-BaseSalarios <- read_excel("Tarea 1/BaseSalarios.xlsx")
+BaseSalarios <- read_excel("BaseSalarios.xlsx")
+```
+
+Se corrige el formato de algunas columnas.
+
+```{r formato_columnas}
+BaseSalarios$`U. Salario` <- as.numeric(BaseSalarios$`U. Salario`)
+BaseSalarios$Fec.Nac <- as.Date(BaseSalarios$Fec.Nac)
 ```
 
