@@ -1,7 +1,6 @@
 ---
 title: "Tarea_1"
-author: Alejandro Brenes Calderón (C21319), Santiago Fernández Sáenz (C22943), Eyeri
-  Méndez Méndez (C24765)
+author: Alejandro Brenes (C21319), Santiago Fernández (C22943), Eyeri Méndez (C24765)
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
