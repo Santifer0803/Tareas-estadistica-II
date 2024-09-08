@@ -7,6 +7,11 @@ output:
   html_document: default
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+suppressPackageStartupMessages(library(dplyr))
+```
+
 Inicialmente, se procede a leer la base de datos necesaria.
 
 ```{r base_datos}
@@ -17,7 +22,10 @@ BaseSalarios <- read_excel("BaseSalarios.xlsx")
 Se corrige el formato de algunas columnas.
 
 ```{r formato_columnas}
+library(dplyr)
 BaseSalarios$Fec.Nac <- as.Date(BaseSalarios$Fec.Nac)
+BaseSalarios <- BaseSalarios %>%
+  rename(Cuotas = Coutas)
 ```
 
 Ahora se procede con los ejercicios.
@@ -48,9 +56,40 @@ Ahora se procede con los ejercicios.
 
 ### 1)
 
+El Criterio de Información de Akaike (AIC) es una herramienta objetiva que cuantifica la idoneidad de un modelo específico en comparación con un conjunto limitado de modelos. Ofrece un método sencillo y objetivo para seleccionar el modelo más apropiado para describir los datos observados ().
+
+Por lo tanto, el Criterio de Información de Akaike es una medida utilizada para comparar y seleccionar modelos estadísticos, especialmente en contextos donde se emplea la máxima verosimilitud. El AIC se basa en la idea de evaluar tanto la calidad del ajuste del modelo como su complejidad, y su fórmula está dada por:
+
+AIC = $2k - 2ln(\hat{L})$,
+
+donde $k$ es el número de parámetros libres del modelo y $\hat{L}$ es la función de máxima verosimilitud.
+
+Este método nos da una aproximación de la distancia entre el modelo y el verdadero proceso que genera los datos observados, el cual es desconocido y a veces hasta difícil de definir. Dado que la estimación está basada en los datos observados, esta distancia es siempre relativa y depende del conjunto de datos que se utilizó. Por lo tanto, un valor de AIC no tiene un significado por sí mismo, sino que es interpretable al compararse con otros valores de AIC utilizando los mismos datos observados ().
+
+En este sentido, el término $2k$ penaliza la complejidad del modelo, previniendo que este sea demasiado complejo, lo cual podría llevar a un sobreajuste, mientras que el término $-2ln(\hat{L})$ representa el ajuste del modelo a los datos. Un valor más bajo indicaría un mejor ajuste.
+
+Por lo tanto, el AIC equilibra el ajuste del modelo con su simplicidad, penalizando la adición de parámetros que no mejoran significativamente el ajuste del modelo. De esta manera, cuando se comparan dos o más modelos, el modelo preferido es el que tiene el AIC más bajo, ya que significa que el modelo logra un buen equilibrio entre simplicidad y ajuste a los datos.
+
 ### 2)
 
+```{r 3.2}
+library(univariateML)
+comparacion_univariate <- model_select(BaseSalarios$Cuotas, 
+                                       models = c("exp", "gamma", "lnorm", 
+                                                  "weibull", "lgamma", "unif"), 
+                                       criterion = "aic",
+                                       na.rm = TRUE)
+comparacion_univariate
+```
+
 ### 3)
+
+```{r 3.3}
+library(rriskDistributions)
+comparacion_rrisk <- fit.cont(BaseSalarios$Cuotas)
+```
+
+Como se puede observar en el dataframe anterior, bajo el criterio del AIC, la distribución Weibull es la que más se aproxima a la variable Cuotas, el cual es el mismo resultado que en el punto 2 de esta parte. Además, los parámetros de dicha distribución obtenidos en este punto y en el anterior son prácticamente los mismos.
 
 ### 4)
 
@@ -63,3 +102,11 @@ Ahora se procede con los ejercicios.
 ### 2)
 
 ### 3)
+
+## Referencias
+
+[El Criterio de Información de Akaike en la Obtención de Modelos Estadísticos de Rendimiento](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjjiNTx37KIAxXoRjABHe6zJjYQFnoECBUQAQ&url=https%3A%2F%2Fwww.researchgate.net%2Fprofile%2FTomas-Pena%2Fpublication%2F236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento%2Flinks%2F58904fa3aca272bc14be3600%2FEl-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf&usg=AOvVaw251RhnkX_-d-T-YnQMd_sa&opi=89978449)
+
+
+
+
