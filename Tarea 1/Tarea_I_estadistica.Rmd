@@ -115,7 +115,23 @@ plot(cuotas_kde)
 ### 2)
 
 La función boot.ci() se utiliza con el propósito de calcular intervalos de confianza para estimaciones obtenidas a través de un proceso de bootstrap. El bootstrap es un método que permite estimar la distribución de un estadístico mediante muestras repetidas con reemplazo de los datos originales. Proporciona diferentes tipos de intervalos de confianza. Toma como entrada un objeto de la clase boot, generado a partir de la función boot(), que contiene los resultados del procedimiento bootstrap.
+
 ### 3)
+
+```{r}
+library(boot)
+
+media_para_boot <- function(data, indices){
+  muestra_boot <- data[indices]
+  return(mean(muestra_boot))
+}
+
+resultados_boot <- boot(data = cuotas, statistic = media_para_boot, R = 1000)
+
+
+
+plot(resultados_boot)
+```
 
 ## Referencias
 
