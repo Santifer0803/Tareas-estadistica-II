@@ -97,16 +97,26 @@ Como se puede observar en el dataframe anterior, bajo el criterio del AIC, la di
 
 ## Parte IV
 
-### 1)
+### 1) 
+El propósito de la función kde() es poder realizar una estimación de densidad de núcleo (kernel density estimation) en uno o varios puntos. Es importante que no se asume una forma específica de la distribución para estimar la densidad de probabilidad de un conjunto de datos observados. Es decir, es una técnica no paramétrica para poder suavizar los datos utilizando un kernel. Es compatible con diferentes tipos de kernel. 
+
+A continuación un ejemplo con la fila 'Cuotas': 
+
+```{r}
+library(ks)
+
+cuotas <- BaseSalarios$Cuotas
+cuotas_kde <- kde(x = cuotas)
+plot(cuotas_kde)
+
+```
+
 
 ### 2)
 
+La función boot.ci() se utiliza con el propósito de calcular intervalos de confianza para estimaciones obtenidas a través de un proceso de bootstrap. El bootstrap es un método que permite estimar la distribución de un estadístico mediante muestras repetidas con reemplazo de los datos originales. Proporciona diferentes tipos de intervalos de confianza. Toma como entrada un objeto de la clase boot, generado a partir de la función boot(), que contiene los resultados del procedimiento bootstrap.
 ### 3)
 
 ## Referencias
 
 [El Criterio de Información de Akaike en la Obtención de Modelos Estadísticos de Rendimiento](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjjiNTx37KIAxXoRjABHe6zJjYQFnoECBUQAQ&url=https%3A%2F%2Fwww.researchgate.net%2Fprofile%2FTomas-Pena%2Fpublication%2F236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento%2Flinks%2F58904fa3aca272bc14be3600%2FEl-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf&usg=AOvVaw251RhnkX_-d-T-YnQMd_sa&opi=89978449)
-
-
-
-
