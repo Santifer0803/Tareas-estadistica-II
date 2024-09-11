@@ -20,7 +20,9 @@ pacman::p_load(readxl,
                univariateML,
                rriskDistributions,
                ks,
-               boot)
+               boot,
+               ggplot2,
+               cowplot)
 ```
 
 Se lee la base de datos necesaria.
@@ -48,7 +50,7 @@ Agregamos la categoría de nivel, en esta, se pondrá un $1$ si la observación 
 
 ```{r categoria_nivel}
 BaseSalarios <- BaseSalarios %>% 
-  mutate(Nivel = ifelse(Cuotas < 150, 1, 2))
+  mutate(Nivel = ifelse(Cuotas < 150, "1", "2"))
 ```
 
 ### 2)
@@ -76,6 +78,15 @@ El diagrama de caja, o diagrama de cajas y bigotes, es un gráfico que muestra l
 
 ### 4)
 
+Se presenta ahora el gráfico de cajas y bigotes para la variable del salario, filtrando por la categoría Nivel.
+
+```{r plotbox}
+BaseSalarios %>% 
+  ggplot(aes(x = Nivel, y = U.Salario, fill = Nivel)) +
+  geom_boxplot() +
+  labs(title = "Boxplot del salario según Nivel", x = "Nivel", y = "Salario") +
+  theme_cowplot()
+```
 
 
 ### 5)
