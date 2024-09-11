@@ -12,19 +12,27 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 suppressPackageStartupMessages(library(dplyr))
 ```
 
-Inicialmente, se procede a leer la base de datos necesaria.
+Inicialmente, se cargan todas las librerías necesarias para la tarea.
+
+```{r librerias}
+pacman::p_load(readxl,
+               dplyr,
+               univariateML,
+               rriskDistributions,
+               ks,
+               boot)
+```
+
+
+se procede a leer la base de datos necesaria.
 
 ```{r base_datos}
-library(readxl)
-
 BaseSalarios <- read_excel("BaseSalarios.xlsx")
 ```
 
 Se corrige el formato de algunas columnas.
 
 ```{r formato_columnas}
-library(dplyr)
-
 BaseSalarios$Fec.Nac <- as.Date(BaseSalarios$Fec.Nac)
 
 BaseSalarios <- BaseSalarios %>%
@@ -76,8 +84,6 @@ Por lo tanto, el AIC equilibra el ajuste del modelo con su simplicidad, penaliza
 ### 2)
 
 ```{r 3.2}
-library(univariateML)
-
 comparacion.univariate <- model_select(BaseSalarios$Cuotas, 
                                        models = c("exp", "gamma", "lnorm", 
                                                   "weibull", "lgamma", "unif"), 
@@ -89,8 +95,6 @@ comparacion.univariate
 ### 3)
 
 ```{r 3.3}
-library(rriskDistributions)
-
 comparacion.rrisk <- fit.cont(BaseSalarios$Cuotas)
 ```
 
@@ -119,8 +123,6 @@ El propósito de la función kde() es poder realizar una estimación de densidad
 A continuación un ejemplo con la fila 'Cuotas': 
 
 ```{r 4.1}
-library(ks)
-
 cuotas.kde <- kde(x = BaseSalarios$Cuotas)
 
 plot(cuotas.kde)
@@ -133,8 +135,6 @@ La función boot.ci() se utiliza con el propósito de calcular intervalos de con
 ### 3)
 
 ```{r 4.2}
-library(boot)
-
 media.boot <- function(data, indices){
   
   muestra.boot <- data[indices]
