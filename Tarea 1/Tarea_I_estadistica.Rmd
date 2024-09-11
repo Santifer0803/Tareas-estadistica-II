@@ -76,6 +76,8 @@ El diagrama de caja, o diagrama de cajas y bigotes, es un gráfico que muestra l
 
 ### 4)
 
+
+
 ### 5)
 
 ### 6)
@@ -180,3 +182,4 @@ plot(resultados.boot)
 
 [La Enseñanza del Diagrama de Caja y Bigotes para Mejorar su Interpretación](https://revistas.utm.edu.ec/index.php/Basedelaciencia/article/download/1107/1102)
 
+Flores, J., & Flores, R. (2018). La enseñanza del diagrama de caja y bigotes para mejorar su interpretación. Revista Bases de la Ciencia. e-ISSN 2588-0764, 3(1), 69-75.
