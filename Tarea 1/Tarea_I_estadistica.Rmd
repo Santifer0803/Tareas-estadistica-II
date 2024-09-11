@@ -56,14 +56,23 @@ BaseSalarios <- BaseSalarios %>%
 Generamos una tabla resumen con los requisitos solicitados.
 
 ```{r tabla_res}
-resumen <- BaseSalarios %>% 
+(resumen <- BaseSalarios %>% 
   group_by(Nivel) %>% 
-  summarise(promedio_sal = mean(U.Salario, na.rm = TRUE),
-            promedio_sex = mean(Sexo, na.rm = TRUE))
+  summarise(prom_sal = mean(U.Salario, na.rm = TRUE),
+            prom_sex = mean(Sexo, na.rm = TRUE),
+            var_sal = var(U.Salario, na.rm = TRUE),
+            var_sex = var(Sexo, na.rm = TRUE),
+            cant_sal = length(U.Salario),
+            cant_sex = length(Sexo),
+            max_sal = max(U.Salario, na.rm = TRUE),
+            max_sex = max(Sexo, na.rm = TRUE),
+            min_sal = min(U.Salario, na.rm = TRUE),
+            min_sex = min(Sexo, na.rm = TRUE)))
 ```
 
-
 ### 3)
+
+El diagrama de caja, o diagrama de cajas y bigotes, es un gráfico que muestra la distribución de los datos con $5$ puntos principales, el máximo, el mínimo y los $3$ cuartiles de los datos, es decir, muestra los $4$ cuartiles de la muestra de datos y sus extremos. Junto a toda esa información, se logra observar una medida de tendencia central (mediana), medidas de dispersión (el rango y el rango intercuartílico) y la simetría o asimetría de una función, pues los datos pueden estar concentrados en alguno de los extremos de la distribución, en el centro o en un punto medio de estos (Flores, J., & Flores, R. 2018).
 
 ### 4)
 
@@ -169,5 +178,5 @@ plot(resultados.boot)
 
 [El Criterio de Información de Akaike en la Obtención de Modelos Estadísticos de Rendimiento](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjjiNTx37KIAxXoRjABHe6zJjYQFnoECBUQAQ&url=https%3A%2F%2Fwww.researchgate.net%2Fprofile%2FTomas-Pena%2Fpublication%2F236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento%2Flinks%2F58904fa3aca272bc14be3600%2FEl-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf&usg=AOvVaw251RhnkX_-d-T-YnQMd_sa&opi=89978449)
 
-
+[La Enseñanza del Diagrama de Caja y Bigotes para Mejorar su Interpretación](https://revistas.utm.edu.ec/index.php/Basedelaciencia/article/download/1107/1102)
 
