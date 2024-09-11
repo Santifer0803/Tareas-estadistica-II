@@ -23,8 +23,7 @@ pacman::p_load(readxl,
                boot)
 ```
 
-
-se procede a leer la base de datos necesaria.
+Se lee la base de datos necesaria.
 
 ```{r base_datos}
 BaseSalarios <- read_excel("BaseSalarios.xlsx")
@@ -44,6 +43,13 @@ Ahora se procede con los ejercicios.
 ## Parte I
 
 ### 1)
+
+Agregamos la categoría de nivel, en esta, se pondrá un $1$ si la observación tiene menos de $150$ cuotas y $2$ si se tienen más o igual cantidad de cuotas, pues no se especifica qué hacer con las personas que tienen exactamente las $150$ cuotas.
+
+```{r categoria_nivel}
+BaseSalarios <- BaseSalarios %>% 
+  mutate(Nivel = ifelse(Cuotas < 150, 1, 2))
+```
 
 ### 2)
 
