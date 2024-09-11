@@ -53,6 +53,16 @@ BaseSalarios <- BaseSalarios %>%
 
 ### 2)
 
+Generamos una tabla resumen con los requisitos solicitados.
+
+```{r tabla_res}
+resumen <- BaseSalarios %>% 
+  group_by(Nivel) %>% 
+  summarise(promedio_sal = mean(U.Salario, na.rm = TRUE),
+            promedio_sex = mean(Sexo, na.rm = TRUE))
+```
+
+
 ### 3)
 
 ### 4)
