@@ -91,6 +91,12 @@ BaseSalarios %>%
 
 ### 5)
 
+Hay una diferencia clara con respecto a los niveles, las personas que tienen $150$ o más cuotas presentan un salario más alto en general, esto se puede comprobar visualmente con los cuartiles de las $2$ cajas, pues, el percentil $75\%$ del nivel $1$ está casi igual que el percentil $25\%$ del nivel $2$, lo cual denota una gran diferencia en cuanto a salarios entre los niveles.
+
+De la mano con lo anterior, se puede ver que el punto en donde más se concentran datos en el nivel $2$ (la mediana, representada por la línea del centro de la caja azul), superaría el percentíl $75\%$ del nivel $1$, mostrando, una vez más, la gran diferencia entre ambos niveles.
+
+Por otro lado, es interesante la cantidad de valores atípicos, fuera del rango intercuartílico, aunque no se puede determinar una cantidad exacta visualmente, se logra observar que en el nivel $2$ hay múltiples valores que superan el máximo del nivel $1$, evidenciando que las personas que se encuentran en este último tienen un salario de, a lo sumo, $4 .000 .000$, mientras que en el otro grupo se encuentran varias observaciones por encima de este valor, llegando a superar los $6. 000. 000$.
+
 ### 6)
 
 ## Parte II
