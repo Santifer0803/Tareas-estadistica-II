@@ -99,6 +99,27 @@ Por otro lado, es interesante la cantidad de valores atípicos, fuera del rango 
 
 ### 6)
 
+Usando la prueba de hipótesis, se presenta el siguiente resultado.
+
+```{r prueba_hip}
+# Filtramos las observaciones de nivel 1 para salarios
+salarios.n1 <- BaseSalarios %>% 
+  filter(Nivel == "1") %>% 
+  select(U.Salario)
+
+prom.n2 <- resumen[[2, 2]]
+
+t.test(salarios.n1, mu = prom.n2, alternative = "less", conf.level = 0.95)
+```
+
+Para esta prueba de hipótesis nos centraremos, inicialmente, en la hipótesis nula, esta dice que la media verdadera (del nivel $1$) es mayor o igual a la media del nivel $2$. La respuesta a esta pregunta se puede ver con el p-valor resultante de la prueba, el cual es exactamente:
+
+```{r p-valor}
+t.test(salarios.n1, mu = prom.n2, alternative = "less", conf.level = 0.95)$p.value
+```
+
+Recordemos que el p-valor indica que si se asume la hipótesis nula cierta, la probabilidad de que sea realmente verdadera. En este caso, hay una probabilidad de exactamente $0$ de que la media del nivel $1$ sea mayor o igual a la media del nivel $2$, lo cual refuerza la conclusión del inciso anterior.
+
 ## Parte II
 
 ### 1)
