@@ -124,6 +124,17 @@ Recordemos que el p-valor indica que si se asume la hipótesis nula cierta, la p
 
 ### 1)
 
+El histograma vendría dado por:
+
+```{r histograma}
+BaseSalarios %>% 
+  ggplot(aes(x = Cuotas)) +
+  geom_histogram(fill = "seagreen3", color = "black") +
+  labs(title = "Histograma de las cuotas", x = "Cantidad de cuotas", y = "Densidad") +
+  theme_cowplot()
+```
+
+
 ### 2)
 
 ### 3)
