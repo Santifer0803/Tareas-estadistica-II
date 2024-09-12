@@ -159,7 +159,12 @@ lines(D,
       col = "darkolivegreen3")
 ```
 
-Seguimos con el kernel gaussiano.
+Seguimos con el kernel gaussiano, para este es necesario calcular el bandwidth.
+
+```{r bandwidth}
+(h <- 0.9 * min(c(sd(BaseSalarios$Cuotas), (IQR(BaseSalarios$Cuotas)) / 1.35)) * (nrow(BaseSalarios) ^ (1 / 5)))
+```
+
 
 ### 3)
 
