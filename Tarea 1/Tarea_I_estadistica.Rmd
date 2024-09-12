@@ -127,7 +127,7 @@ Recordemos que el p-valor indica que si se asume la hipótesis nula cierta, la p
 El histograma vendría dado por:
 
 ```{r histograma}
-BaseSalarios %>% 
+BaseSalarios %>%
   ggplot(aes(x = Cuotas)) +
   geom_histogram(fill = "seagreen3", color = "black") +
   labs(title = "Histograma de las cuotas", x = "Cantidad de cuotas", y = "Densidad") +
@@ -136,6 +136,26 @@ BaseSalarios %>%
 
 
 ### 2)
+
+Iniciamos con el kernel biweight.
+
+```{r kernel_biweight}
+D <- density(BaseSalarios$Cuotas, kernel = "biweight")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Biweight",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "darkolivegreen3")
+```
+
+Seguimos con el kernel gaussiano.
 
 ### 3)
 
