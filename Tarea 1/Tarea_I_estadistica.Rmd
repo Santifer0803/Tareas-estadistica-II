@@ -1,10 +1,14 @@
 ---
-title: "Tarea_1"
+title: "Tarea 1"
 author: Alejandro Brenes (C21319), Santiago Fernández (C22943), Eyeri Méndez (C24765)
 date: "`r Sys.Date()`"
-output:
-  pdf_document: default
-  html_document: default
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    highlight: tango
+    extra_dependencies: ["fontspec"]
+header-includes:
+  - \setmainfont{Times New Roman}
 ---
 
 ```{r setup, include=FALSE}
@@ -214,41 +218,65 @@ ic.desv.est
 
 ### 1)
 
-El propósito de la función kde() es poder realizar una estimación de densidad de núcleo (kernel density estimation) en uno o varios puntos. Es importante que no se asume una forma específica de la distribución para estimar la densidad de probabilidad de un conjunto de datos observados. Es decir, es una técnica no paramétrica para poder suavizar los datos utilizando un kernel. Es compatible con diferentes tipos de kernel. 
+El propósito de la función kde() es poder realizar una estimación de densidad de núcleo (kernel density estimation) en uno o varios puntos. No se asume una forma específica de la distribución para estimar la densidad de probabilidad del conjunto de datos observados. Es compatible con diferentes tipos de kernel. Devuelve un objeto del tipo 'kde' y los resultados más importantes que incluye son "eval.points" que corresponden a los datos para el eje x y "estimate" que corresponde a la densidad asignada.  
 
-A continuación un ejemplo con la fila 'Cuotas': 
+A continuación un ejemplo con la columna 'Cuotas': 
 
-```{r 4.1}
+```{r 4.1 kde_con_cuotas}
 cuotas.kde <- kde(x = BaseSalarios$Cuotas)
 
-plot(cuotas.kde)
+cuotas.kde.df <- data.frame(x = cuotas.kde$eval.points, 
+                     y = cuotas.kde$estimate)
+
+ggplot(cuotas.kde.df, aes(x = x, y = y)) +
+  geom_line(color = "darkblue", size = 1.2) + 
+  labs(title = "Estimación de Densidad Kernel para las cuotas",
+       x = "Valores",
+       y = "Densidad") +
+  theme_minimal(base_size = 14)
 ```
 
 ### 2)
 
-La función boot.ci() se utiliza con el propósito de calcular intervalos de confianza para estimaciones obtenidas a través de un proceso de bootstrap. Bootstrap es un método que permite estimar la distribución de un estadístico mediante muestras repetidas con reemplazo de los datos originales. Además, proporciona diferentes tipos de intervalos de confianza. Esta función toma como entrada un objeto de la clase boot, generado a partir de la función boot(), que contiene los resultados del procedimiento bootstrap.
+La función boot.ci() se utiliza con el propósito de calcular intervalos de confianza para estimaciones obtenidas a través de un proceso de Bootstrap. Además, proporciona diferentes tipos de intervalos de confianza. Esta función toma como entrada un objeto de la clase boot, generado a partir de la función boot(), que contiene los resultados del procedimiento bootstrap.
 
 ### 3)
 
-```{r 4.2}
-media.boot <- function(data, indices){
-  
-  muestra.boot <- data[indices]
-  
-  return(mean(muestra.boot))
-}
+Ahora, el próposito es estimar la media $\mu$ para las cuotas. Dado que para la prueba Bootstrap se escogieron $1000$ muestras, el estimador seria: 
+
+\[\hat{\theta} = \frac{1}{1000} \sum_{i = 1}^{1000} {\bar{x_i}}\]
+
+A continuacion, la prueba Bootstrap usando boot(): 
+```{r 4.3 prueba_Bootsrap}
 
 resultados.boot <- boot(data = BaseSalarios$Cuotas, 
-                        statistic = media.boot, 
+                        statistic = function(data, indices)
+                        mean(data[indices]), 
                         R = 1000)
+print(resultados.boot)
+```
 
+Teniendo los resultados, procedemos con la comparacion: 
+```{r 4.3 comparacion}
+media.bootstrap <- mean(resultados.boot$t)  
+media.original <- resultados.boot$t0       
+
+print(paste("Media Bootstrap:", media.bootstrap))
+print(paste("Media Original:", media.original))
+```
+
+Como se vio anteriormente, se confirma el sesgo de $0.02018587$. Finalmente, realiza el histograma de la prueba Bootstrap: 
+```{r 4.3 histograma_Bootsrap}
 plot(resultados.boot)
 ```
 
+
 ## Referencias
 
-[El Criterio de Información de Akaike en la Obtención de Modelos Estadísticos de Rendimiento](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjjiNTx37KIAxXoRjABHe6zJjYQFnoECBUQAQ&url=https%3A%2F%2Fwww.researchgate.net%2Fprofile%2FTomas-Pena%2Fpublication%2F236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento%2Flinks%2F58904fa3aca272bc14be3600%2FEl-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf&usg=AOvVaw251RhnkX_-d-T-YnQMd_sa&opi=89978449)
+[Martínez, D. R., Albín, J. L., Cabaleiro, J. C., Pena, T. F., Rivera, F. F., & Blanco, V. (2009, septiembre). El criterio de información de Akaike en la obtención de modelos estadísticos de rendimiento. XX Jornadas de Paralelismo, A Coruña, España] (https://www.researchgate.net/profile/Tomas-Pena/publication/236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento/links/58904fa3aca272bc14be3600/El-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf)
 
-[La Enseñanza del Diagrama de Caja y Bigotes para Mejorar su Interpretación](https://revistas.utm.edu.ec/index.php/Basedelaciencia/article/download/1107/1102)
+[Flores, J., & Flores, R. (2018). La enseñanza del diagrama de caja y bigotes para mejorar su interpretación. Revista Bases de la Ciencia. e-ISSN 2588-0764, 3(1), 69-75.](https://revistas.utm.edu.ec/index.php/Basedelaciencia/article/download/1107/1102)
 
-Flores, J., & Flores, R. (2018). La enseñanza del diagrama de caja y bigotes para mejorar su interpretación. Revista Bases de la Ciencia. e-ISSN 2588-0764, 3(1), 69-75.
+kde function - RDocumentation. (2017). Rdocumentation.org. https://www.rdocumentation.org/packages/ks/versions/1.10.7/topics/kde
+
+boot.ci function - RDocumentation. (2024). Rdocumentation.org. https://www.rdocumentation.org/packages/boot/versions/1.3-31/topics/boot.ci
