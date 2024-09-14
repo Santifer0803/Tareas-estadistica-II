@@ -141,10 +141,15 @@ BaseSalarios %>%
 
 ### 2)
 
-Iniciamos con el kernel biweight.
+Iniciamos calculando el bandwith pedido:
+
+```{r bw}
+(h <- (0.9 * min(c(sd(BaseSalarios$Cuotas), ((IQR(BaseSalarios$Cuotas)) / (1.35)))) * (nrow(BaseSalarios) ^ (1 / 5))))
+```
+
 
 ```{r kernel_biweight}
-D <- density(BaseSalarios$Cuotas, kernel = "biweight")
+D <- density(BaseSalarios$Cuotas, kernel = "biweight", bw = h)
 hist(
   BaseSalarios$Cuotas,
   main = "Kernel Biweight",
@@ -159,12 +164,94 @@ lines(D,
       col = "darkolivegreen3")
 ```
 
-Seguimos con el kernel gaussiano, para este es necesario calcular el bandwidth.
+Seguimos con el kernel gaussiano.
 
-```{r bandwidth}
-(h <- 0.9 * min(c(sd(BaseSalarios$Cuotas), (IQR(BaseSalarios$Cuotas)) / 1.35)) * (nrow(BaseSalarios) ^ (1 / 5)))
+```{r kernel_normal}
+D <- density(BaseSalarios$Cuotas, kernel = "gaussian")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Normal",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "darkorchid")
 ```
 
+Siguiendo con el de Epanechnikov.
+
+```{r kernel_epanechnikov}
+D <- density(BaseSalarios$Cuotas, kernel = "epanechnikov")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Normal",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "skyblue2")
+```
+Procedemos con el de coseno.
+
+```{r kernel_coseno}
+D <- density(BaseSalarios$Cuotas, kernel = "cosine")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Normal",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "coral2")
+```
+
+Procedemos con el rectangular.
+
+```{r kernel_rectangular}
+D <- density(BaseSalarios$Cuotas, kernel = "rectangular")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Normal",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "lightslateblue")
+```
+
+Y finalmente con el triangular.
+
+```{r}
+D <- density(BaseSalarios$Cuotas, kernel = "triangular")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Kernel Normal",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D,
+      lwd = 2,
+      lty = 1,
+      col = "indianred4")
+```
 
 ### 3)
 
