@@ -237,7 +237,7 @@ lines(D,
 
 Y finalmente con el triangular.
 
-```{r}
+```{r kernel_triangular}
 D <- density(BaseSalarios$Cuotas, kernel = "triangular")
 hist(
   BaseSalarios$Cuotas,
@@ -254,6 +254,13 @@ lines(D,
 ```
 
 ### 3)
+
+Ahora juntamos todo lo anterior en un solo gráfico.
+
+```{r grafico_kernels}
+
+```
+
 
 ## Parte III
 
