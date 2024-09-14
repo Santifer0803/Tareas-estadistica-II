@@ -59,22 +59,60 @@ BaseSalarios <- BaseSalarios %>%
 
 ### 2)
 
-Generamos una tabla resumen con los requisitos solicitados.
+Generamos una tabla resumen con los requisitos solicitados, en primer lugar, filtrando solo por nivel.
 
-```{r tabla_res}
-(resumen <- BaseSalarios %>% 
+```{r res_nivel}
+BaseSalarios %>% 
   group_by(Nivel) %>% 
   summarise(prom_sal = mean(U.Salario, na.rm = TRUE),
-            prom_sex = mean(Sexo, na.rm = TRUE),
             var_sal = var(U.Salario, na.rm = TRUE),
-            var_sex = var(Sexo, na.rm = TRUE),
             cant_sal = length(U.Salario),
-            cant_sex = length(Sexo),
             max_sal = max(U.Salario, na.rm = TRUE),
-            max_sex = max(Sexo, na.rm = TRUE),
-            min_sal = min(U.Salario, na.rm = TRUE),
-            min_sex = min(Sexo, na.rm = TRUE)))
+            min_sal = min(U.Salario, na.rm = TRUE)
+            )
 ```
+
+En la tabla annterior se observan múltiples datos interesantes, con respecto al promedio, las personas con más de $150$ cuotas presentan un promedio más elevado, con una diferencia salarial de más de $\$ 600.000$. Esto se puede unir a la variable de máximo y mínimo, en la primera de estas se observa que el salario máximo de las personas con más de $150$ cuotas supera por más de $\$ 3.000.000$ a los del nivel $1$. De forma similar que en el mínimo, en el cual se puede ver que, nuevamente, hay una diferencia abismal entre el nivel $1$ y el nivel $2$, siendo este último el que tiene un valor más grande.
+
+Con respecto a la cantidad, con los datos mostrados se puede ver que es más común que las personas tengan menos de $150$, sin embargo, la cantidad de individuos que presentan más que estas no es tan bajo, pues, en la base de datos, son unos $600$ menos.
+
+Pasando a la varianza, se observa una cantidad muy elevada en ambos niveles, esto se puede reforzar con los valores máximos y mínimos de cada nivel, los cuales se encuentran a mucha distancia, esto indica que hay una gran diversidad de datos numéricamente hablando.
+
+En este punto, se procede a hacer una tabla filtrando por sexo.
+
+```{r res_sexo}
+BaseSalarios %>% 
+  group_by(Sexo) %>% 
+  summarise(prom_sal = mean(U.Salario, na.rm = TRUE),
+            var_sal = var(U.Salario, na.rm = TRUE),
+            cant_sal = length(U.Salario),
+            max_sal = max(U.Salario, na.rm = TRUE),
+            min_sal = min(U.Salario, na.rm = TRUE)
+            )
+```
+
+Se logra ver que, en este caso, la cantidad de personas en el sexo $1$ es bastante menor que en el sexo $2$, lo cual, en primer lugar, explica la elevada varianza de esta primer categoría, además, hace que haya que tomar los datos con precaución, pues la diferencia de observaciones puede llevar a que los datos extremos de los datos se concentren en alguna de las categorías, distorsionando las conclusiones.
+
+Nuevamente, con los datos presentes, el sexo $1$ presenta un mayor salario promedio y un salario mínimo mayor, aunque, por otro lado, el sexo $2$ presenta un mayor salario máximo, lo cual evidencia que, por lo general, la primer categoría tiene mayor salario, pero algunas observaciones, quizá atípicas, pueden caer en la otra categoría.
+
+Finalmente se realiza una tabla filtrando por sexo y nivel.
+
+```{r res_combinada}
+BaseSalarios %>% 
+  group_by(Sexo, Nivel) %>% 
+  summarise(prom_sal = mean(U.Salario, na.rm = TRUE),
+            var_sal = var(U.Salario, na.rm = TRUE),
+            cant_sal = length(U.Salario),
+            max_sal = max(U.Salario, na.rm = TRUE),
+            min_sal = min(U.Salario, na.rm = TRUE)
+            )
+```
+
+De forma similar a las tablas anteriores, se observa que la cantidad de personas en cada grupo influye directamente en la varianza, a pesar de que todas las categorías presentan un valor muy elevado en esta última categoría, se observa que el valor baja cuantas más observaciones tiene el grupo.
+
+Se puede observar que el promedio es más influido por el nivel, pues, el nivel $2$ presenta los promedios más altos de los 4 grupos, lo cual se podría intuir de las $2$ tablas anteriores, pues la diferencia de promedios entre sexos no era muy grande en comparación con la diferencia de promedios en las categorías de nivel.
+
+Asimismo, se puede ver que el peso del nivel se mantiene en los máximos y mínimos, pues, se observa que en el nivel $2$ se encuentran los valores más elevados de ambas variables, dejando claro el peso del nivel sobre el sexo.
 
 ### 3)
 
