@@ -188,7 +188,7 @@ Siguiendo con el de Epanechnikov.
 D <- density(BaseSalarios$Cuotas, kernel = "epanechnikov")
 hist(
   BaseSalarios$Cuotas,
-  main = "Kernel Normal",
+  main = "Kernel Epanechnikov",
   freq = FALSE,
   col = "khaki4",
   xlab = "Cuotas",
@@ -205,7 +205,7 @@ Procedemos con el de coseno.
 D <- density(BaseSalarios$Cuotas, kernel = "cosine")
 hist(
   BaseSalarios$Cuotas,
-  main = "Kernel Normal",
+  main = "Kernel coseno",
   freq = FALSE,
   col = "khaki4",
   xlab = "Cuotas",
@@ -223,7 +223,7 @@ Procedemos con el rectangular.
 D <- density(BaseSalarios$Cuotas, kernel = "rectangular")
 hist(
   BaseSalarios$Cuotas,
-  main = "Kernel Normal",
+  main = "Kernel rectangular",
   freq = FALSE,
   col = "khaki4",
   xlab = "Cuotas",
@@ -241,7 +241,7 @@ Y finalmente con el triangular.
 D <- density(BaseSalarios$Cuotas, kernel = "triangular")
 hist(
   BaseSalarios$Cuotas,
-  main = "Kernel Normal",
+  main = "Kernel Triangular",
   freq = FALSE,
   col = "khaki4",
   xlab = "Cuotas",
@@ -258,7 +258,29 @@ lines(D,
 Ahora juntamos todo lo anterior en un solo gráfico.
 
 ```{r grafico_kernels}
+kernels <- c("biweight", "gaussiano", "epanechnikov", "coseno", "rectangular", "triangular")
 
+D1 <- density(BaseSalarios$Cuotas, kernel = "biweight", bw = h)
+D2 <- density(BaseSalarios$Cuotas, kernel = "gaussian")
+D3 <- density(BaseSalarios$Cuotas, kernel = "epanechnikov")
+D4 <- density(BaseSalarios$Cuotas, kernel = "cosine")
+D5 <- density(BaseSalarios$Cuotas, kernel = "rectangular")
+D6 <- density(BaseSalarios$Cuotas, kernel = "triangular")
+hist(
+  BaseSalarios$Cuotas,
+  main = "Histograma y tipos de kernels",
+  freq = FALSE,
+  col = "khaki4",
+  xlab = "Cuotas",
+  ylab = "Densidad"
+)
+lines(D1,lwd=2,lty=1,col="darkolivegreen")
+lines(D2,lwd=2,lty=1,col="darkorchid")
+lines(D3,lwd=2,lty=1,col="skyblue2")
+lines(D4,lwd=2,lty=1,col="coral2")
+lines(D5,lwd=2,lty=1,col="lightslateblue")
+lines(D6,lwd=2,lty=1,col="indianred4")
+legend("topright", legend = kernels, col = seq(kernels), lty = 1,lwd = 2,cex = 0.5)
 ```
 
 
