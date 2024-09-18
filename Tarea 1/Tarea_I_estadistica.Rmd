@@ -477,7 +477,7 @@ plot(resultados.boot)
 
 ## Referencias
 
-[Martínez, D. R., Albín, J. L., Cabaleiro, J. C., Pena, T. F., Rivera, F. F., & Blanco, V. (2009, septiembre). El criterio de información de Akaike en la obtención de modelos estadísticos de rendimiento. XX Jornadas de Paralelismo, A Coruña, España] (https://www.researchgate.net/profile/Tomas-Pena/publication/236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento/links/58904fa3aca272bc14be3600/El-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf)
+[Martínez, D. R., Albín, J. L., Cabaleiro, J. C., Pena, T. F., Rivera, F. F., & Blanco, V. (2009, septiembre). El criterio de información de Akaike en la obtención de modelos estadísticos de rendimiento. XX Jornadas de Paralelismo, A Coruña, España](https://www.researchgate.net/profile/Tomas-Pena/publication/236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento/links/58904fa3aca272bc14be3600/El-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf)
 
 [Flores, J., & Flores, R. (2018). La enseñanza del diagrama de caja y bigotes para mejorar su interpretación. Revista Bases de la Ciencia. e-ISSN 2588-0764, 3(1), 69-75.](https://revistas.utm.edu.ec/index.php/Basedelaciencia/article/download/1107/1102)
 
