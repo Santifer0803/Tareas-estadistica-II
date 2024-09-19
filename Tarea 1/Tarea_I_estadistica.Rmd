@@ -469,7 +469,7 @@ print(paste("Media Bootstrap:", media.bootstrap))
 print(paste("Media Original:", media.original))
 ```
 
-Como se vio anteriormente, se confirma el sesgo de $0.07659869$. Finalmente, realiza el histograma de la prueba Bootstrap: 
+Finalmente, se realiza el histograma de la prueba Bootstrap: 
 ```{r 4.3 histograma_Bootsrap}
 plot(resultados.boot)
 ```
