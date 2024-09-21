@@ -180,7 +180,6 @@ BaseSalarios %>%
   theme_cowplot()
 ```
 
-
 ### 2)
 
 Iniciamos calculando el bandwith pedido:
@@ -366,7 +365,6 @@ legend(
 )
 ```
 
-
 ## Parte III
 
 ### 1)
@@ -408,11 +406,26 @@ Como se puede observar en el dataframe del punto anterior, bajo el criterio del 
 
 ### 5)
 
-Con la distribución seleccionada, se procede a construir un intervalo de confianza para la media y la desviación estándar de la variable Cuotas.
+Con la distribución seleccionada, se procede a construir un intervalo de confianza para la media y la desviación estándar de la variable Cuotas, usando las fórmulas para la media y la varianza de una distribución Weibull.
 
 ```{r 3.5}
-ic.media <- bootstrapml(comparacion.univariate, map = mean)
-ic.desv.est <- bootstrapml(comparacion.univariate, map = sd)
+cuotas.weibull <- mlweibull(BaseSalarios$Cuotas)
+
+ic.media <- bootstrapml(
+  cuotas.weibull,
+  map = function(x)
+    x[2] * gamma(1 + 1 / x[1]),
+  probs = c(0.05, 0.95)
+)
+
+ic.desv.est <- bootstrapml(
+  cuotas.weibull,
+  map = function(x)
+    sqrt(x[2] ^ 2 * (gamma(1 + 2 / x[1]) - (gamma(
+      1 + 1 / x[1]
+    ) ^ 2))),
+  probs = c(0.05, 0.95)
+)
 
 ic.media
 ic.desv.est
@@ -474,7 +487,6 @@ Finalmente, se realiza el histograma de la prueba Bootstrap:
 plot(resultados.boot)
 ```
 
-
 ## Referencias
 
 [Martínez, D. R., Albín, J. L., Cabaleiro, J. C., Pena, T. F., Rivera, F. F., & Blanco, V. (2009, septiembre). El criterio de información de Akaike en la obtención de modelos estadísticos de rendimiento. XX Jornadas de Paralelismo, A Coruña, España](https://www.researchgate.net/profile/Tomas-Pena/publication/236279245_El_criterio_de_informacion_de_Akaike_en_la_obtencion_de_modelos_estadisticos_de_Rendimiento/links/58904fa3aca272bc14be3600/El-criterio-de-informacion-de-Akaike-en-la-obtencion-de-modelos-estadisticos-de-Rendimiento.pdf)
@@ -484,3 +496,6 @@ plot(resultados.boot)
 kde function - RDocumentation. (2017). Rdocumentation.org. https://www.rdocumentation.org/packages/ks/versions/1.10.7/topics/kde
 
 boot.ci function - RDocumentation. (2024). Rdocumentation.org. https://www.rdocumentation.org/packages/boot/versions/1.3-31/topics/boot.ci
+
+
+
