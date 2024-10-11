@@ -1,0 +1,79 @@
+---
+title: "Tarea_II_estadistica"
+author: "Alejandro Brenes (C21319), Santiago Fernández (C22943), Eyeri Méndez (C24765)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# 1)
+
+
+
+# 2)
+
+## a)
+
+
+
+## b)
+
+
+
+# 3)
+
+## a)
+
+
+
+## b)
+
+
+
+## c)
+
+
+
+## d)
+
+
+
+## e)
+
+
+
+# 4)
+
+## a)
+
+
+
+## b)
+
+
+
+# 5)
+
+## a)
+
+
+
+## b)
+
+
+
+## c)
+
+
+
+## d)
+
+
+
+## e)
+
+
+
+## f)
+
+
+
