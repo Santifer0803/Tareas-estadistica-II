@@ -201,12 +201,97 @@ En el caso del intervalo de credibilidad anterior, el valor $0.5$ se encuentra d
 
 # 4)
 
+En primer lugar, hace falta definir la función correspondiente.
+
+```{r fun_min}
+f <- function(x){(sin(10 * x)) / (10 * cos(x))}
+```
+
+
+
 ## a)
 
+En primer lugar, en el gráfico de la función se puede ver que la función tiene múltiples mínimos en el intervalo requerido.
 
+```{r grafico}
+curve(f, col = "violet", lwd = 2, from = 0, to = 10, n = 1000, ylab="f(x)")
+```
+
+El algoritmo de recalentamiento simulado es el siguiente.
+
+```{r fun_recalentamiento}
+resim <- function(f,
+                  alpha = 0.5,
+                  s0 = 0,
+                  niter,
+                  mini = -Inf,
+                  maxi = Inf) {
+  # Valor inicial
+  s_n <- s0
+  
+  # Vector para guardar los estados
+  estados <- rep(0, niter)
+  
+  # Contador de iteraciones
+  iter_count <- 0
+  
+  # Ciclo para encontrar el mínimo
+  for (k in 1:niter) {
+    # Estado de esta iteración
+    estados[k] <- s_n
+    
+    # Se reduce el T según el número de iteraciones
+    t <- (1 - alpha) ^ k
+    
+    # Nuevo estado para comparar con el actual
+    s_new <- rnorm(1, s_n, 1)
+    
+    # Se acorta el intervalo según los estados
+    if (s_new < mini) {
+      s_new <- mini
+    }
+    if (s_new > maxi) {
+      s_new <- maxi
+    }
+    
+    # Se define la diferencia de los estados, evaluados en sus funciones
+    dif <- f(s_new) - f(s_n)
+    
+    # Se actualiza el estado según la condición
+    if (dif < 0) {
+      s_n <- s_new
+    }
+    else {
+      # Número aleatorio para comparar
+      random <- runif(1, 0, 1)
+      
+      # Se compara el aleatorio con p
+      if (random < exp(-dif / t)) {
+        s_n <- s_new
+      }
+    }
+    
+    # Aumenta el contador de iteraciones
+    iter_count <- iter_count + 1
+  }
+  return(list(minimo = s_n, estados = estados))
+}
+```
+
+Se estima el mínimo usando el algoritmo anterior.
+
+```{r minimo}
+Resultado <-resim(f, 0.1, 5, 1000, 0, 10)
+cat("El mínimo de la función f en [0, 10] es: ", Resultado$minimo)
+```
 
 ## b)
 
+Los estados se pueden observar en el siguiente gráfico.
+
+```{r estados}
+plot(Resultado$estados)
+```
 
 
 # 5)
