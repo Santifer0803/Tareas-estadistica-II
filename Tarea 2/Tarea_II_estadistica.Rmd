@@ -7,17 +7,87 @@ output: html_document
 
 # 1)
 
+```{r error_aproximacion}
+set.seed(12345)
 
+# Definimos la función a integrar
+f <- Vectorize(function(x)
+  exp(-x ^ 2) / (1 + x ^ 2))
+
+# Calculamos el valor exacto de la integral
+int_exacta <- integrate(f, 0, 1)$value
+
+# Tamaño de la muestra
+n <- 10 ^ 6
+
+# Generamos una m.a.s de U[0, 1]
+U <- runif(n)
+
+# Calculamos los valores de la función en los valores generados
+Y <- f(U)
+
+# Calculamos la aproximación de la integral mediante Monte Carlo
+int_aprox <- mean(Y)
+
+# Calculamos el error absoluto entre el valor aproximado y el valor exacto de la integral
+error_1 <- abs(int_aprox - int_exacta)
+
+error_1
+```
 
 # 2)
 
 ## a)
 
+Dado que la pérdida $L \sim Exp(\lambda)$, con $\lambda = 1$, entonces su
+función de densidad está dada por $f_L(L) = e^{-L}$, y además $E[L] = \int_{0}^{\infty} L \cdot f_L(L) \, dL = \frac{1}{\lambda} = 1$
 
+```{r f_L(L)}
+lambda <- 1
+
+f_L <- function(L){
+  
+  return(lambda * exp(-lambda * L))
+  
+}
+```
 
 ## b)
 
+```{r valor_esperado}
+set.seed(54321)
 
+# Número de muestras
+n <- 10 ^ 4
+
+# Generamos las muestras de la distribución auxiliar g(L) ~ N(3, 4)
+g_L <- rnorm(n, mean = 3, sd = 2)
+
+# Filtramos para asegurarnos de que las muestras sean positivas
+g_L <- g_L[g_L > 0]
+
+# Definimos una función que calcula el valor correspondiente para cada L
+h <- Vectorize(function(L)
+  (L * f_L(L)) / (dnorm(L, mean = 3, sd = 2)))
+
+# Calculamos los valores de la función en los valores de la muestra
+Y <- h(g_L)
+
+# Calculamos la estimación del valor esperado
+estimacion <- mean(Y)
+
+# Calculamos el valor esperado exacto
+valor_esperado <- 1 / lambda
+
+# Calculamos el error absoluto entre la estimación y el valor esperado
+error_2 <- abs(estimacion - valor_esperado)
+
+# Guardamos lo obtenido en una matriz
+A <- matrix(c(estimacion, valor_esperado, error_2), ncol = 3)
+colnames(A) <- c("Estimación", "Valor real", "Error absoluto")
+
+A
+```
 
 # 3)
 
@@ -27,13 +97,13 @@ Inicialmente, agregamos la muestra que nos da el problema.
 muestra <- c(2.72, 1.93, 1.76, 0.49, 6.12, 0.43, 4.01, 1.71, 2.01, 5.96)
 ```
 
-
 ## a)
 
 Debido a que tenemos una muestra, se debe calcular su función de verosimilitud.
 
-```{r Verosimilitud}
-lik <- Vectorize(function(lambda) prod(dexp(muestra, rate = lambda)))
+```{r verosimilitud}
+lik <- Vectorize(function(lambda)
+  prod(dexp(muestra, rate = lambda)))
 ```
 
 Para la constante *c* óptima, según la muestra, se maximiza numéricamente la verosimilitud.
@@ -49,9 +119,16 @@ c <- emv$objective
 Para asegurarnos que el algoritmo será eficaz, considere el siguiente gráfico.
 
 ```{r grafico_fun}
-f.cuasi <- function(lambda) lik(lambda) * dgamma(lambda, shape = 2, scale = 1)
-curve(c * dgamma(x, shape = 2, scale = 1), xlim = c(0, 4), ylim = c(0, c/2), lty = 2,
-xlab = "mu", ylab = "cuasi-densidad")
+f.cuasi <- function(lambda)
+  lik(lambda) * dgamma(lambda, shape = 2, scale = 1)
+curve(
+  c * dgamma(x, shape = 2, scale = 1),
+  xlim = c(0, 4),
+  ylim = c(0, c / 2),
+  lty = 2,
+  xlab = "mu",
+  ylab = "cuasi-densidad"
+)
 curve(f.cuasi, add = TRUE)
 ```
 
@@ -73,7 +150,6 @@ Ver <- lik(rc)
 
 # Ciclo para realizar las simulaciones requieridas
 for (i in 1:nsim) {
-  
   # Ciclo para el algoritmo de aceptación-rechazo
   while ((U[i] * c) > (Ver[i])) {
     U[i] <- runif(1)
@@ -95,15 +171,20 @@ cat("Lambda estimado = ", mean(rc))
 El histograma es el siguiente.
 
 ```{r histograma}
-hist(rc, freq = FALSE, main = "Histograma del parámetro lambda", breaks="FD")
+hist(rc,
+     freq = FALSE,
+     main = "Histograma del parámetro lambda",
+     breaks = "FD")
 ```
 
 ## c)
 
 ```{r generaciones}
-{cat("Número de generaciones = ", ngen)
-cat("\nNúmero medio de generaciones = ", ngen/nsim)
-cat("\nProporción de rechazos = ", 1 - (nsim/ngen), "\n")}
+{
+  cat("Número de generaciones = ", ngen)
+  cat("\nNúmero medio de generaciones = ", ngen / nsim)
+  cat("\nProporción de rechazos = ", 1 - (nsim / ngen), "\n")
+}
 ```
 
 ## d)
