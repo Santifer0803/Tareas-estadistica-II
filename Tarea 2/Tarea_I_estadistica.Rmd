@@ -21,25 +21,102 @@ output: html_document
 
 # 3)
 
+Inicialmente, agregamos la muestra que nos da el problema.
+
+```{r muestra}
+muestra <- c(2.72, 1.93, 1.76, 0.49, 6.12, 0.43, 4.01, 1.71, 2.01, 5.96)
+```
+
+
 ## a)
 
+Debido a que tenemos una muestra, se debe calcular su función de verosimilitud.
 
+```{r Verosimilitud}
+lik <- Vectorize(function(lambda) prod(dexp(muestra, rate = lambda)))
+```
+
+Para la constante *c* óptima, según la muestra, se maximiza numéricamente la verosimilitud.
+
+```{r maximo_verosim}
+# Se maximiza la función
+emv <- optimize(lik , int = range(muestra), maximum = TRUE)
+
+# Se extrae la constante c
+c <- emv$objective
+```
+
+Para asegurarnos que el algoritmo será eficaz, considere el siguiente gráfico.
+
+```{r grafico_fun}
+f.cuasi <- function(lambda) lik(lambda) * dgamma(lambda, shape = 2, scale = 1)
+curve(c * dgamma(x, shape = 2, scale = 1), xlim = c(0, 4), ylim = c(0, c/2), lty = 2,
+xlab = "mu", ylab = "cuasi-densidad")
+curve(f.cuasi, add = TRUE)
+```
+
+Aplicando el algoritmo de aceptación-rechazo.
+
+```{r algoritmo_ar}
+# Cantidad de simulaciones
+nsim <- 10 ^ 4
+
+# Muestras correspondientes
+U <- runif(nsim)
+rc <- rgamma(nsim, shape = 2, scale = 1)
+
+# Núumero de generaciones inicial
+ngen <- length(rc)
+
+# Verosimilitud de la muestra de gamma
+Ver <- lik(rc)
+
+# Ciclo para realizar las simulaciones requieridas
+for (i in 1:nsim) {
+  
+  # Ciclo para el algoritmo de aceptación-rechazo
+  while ((U[i] * c) > (Ver[i])) {
+    U[i] <- runif(1)
+    rc[i] <- rgamma(1, shape = 2, scale = 1)
+    Ver[i] <- lik(rc[i])
+    ngen <- ngen + 1
+  }
+}
+```
+
+El estimador de máxima verosimilitud (estimación bayesiana) de una distribución exponencial es el promedio, por lo cual, con los resultados del algoritmo anterior obtenemos el valor estimado de $\lambda$.
+
+```{r lambda_estimado}
+cat("Lambda estimado = ", mean(rc))
+```
 
 ## b)
 
+El histograma es el siguiente.
 
+```{r histograma}
+hist(rc, freq = FALSE, main = "Histograma del parámetro lambda", breaks="FD")
+```
 
 ## c)
 
-
+```{r generaciones}
+{cat("Número de generaciones = ", ngen)
+cat("\nNúmero medio de generaciones = ", ngen/nsim)
+cat("\nProporción de rechazos = ", 1 - (nsim/ngen), "\n")}
+```
 
 ## d)
 
+El intervalo de credibilidad puede construirse de múltiples maneras para que acumule el $\%99$ de masa, en este caso se toma un intervalo "centrado".
 
+```{r IC}
+quantile(rc, c(0.005, 0.995))
+```
 
 ## e)
 
-
+En el caso del intervalo de credibilidad anterior, el valor $0.5$ se encuentra dentro del intervalo, es decir, se aceptaría la hipótesis de que $\lambda = 0.5$.
 
 # 4)
 
