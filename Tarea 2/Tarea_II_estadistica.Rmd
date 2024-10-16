@@ -11,11 +11,11 @@ output: html_document
 set.seed(12345)
 
 # Definimos la función a integrar
-f <- Vectorize(function(x)
+g <- Vectorize(function(x)
   exp(-x ^ 2) / (1 + x ^ 2))
 
 # Calculamos el valor exacto de la integral
-int_exacta <- integrate(f, 0, 1)$value
+int_exacta <- integrate(g, 0, 1)$value
 
 # Tamaño de la muestra
 n <- 10 ^ 6
@@ -24,7 +24,7 @@ n <- 10 ^ 6
 U <- runif(n)
 
 # Calculamos los valores de la función en los valores generados
-Y <- f(U)
+Y <- g(U)
 
 # Calculamos la aproximación de la integral mediante Monte Carlo
 int_aprox <- mean(Y)
@@ -35,12 +35,32 @@ error_1 <- abs(int_aprox - int_exacta)
 error_1
 ```
 
+En el siguiente gráfico podemos apreciar la convergencia de la función $\frac{1}{n} \sum g(u_i)$.
+
+```{r convergencia_MonteCarlo}
+prod_acum <- cumsum(Y) / (1:n)
+
+plot(
+  (1:n) / 1000,
+  prod_acum,
+  col = "blue",
+  type = "l",
+  ylab = "Aproximación",
+  xlab = "Iteraciones (miles)"
+)
+
+abline(h = integrate(g, 0, 1)$value,
+       col = "red",
+       lwd = 1)
+```
+
+
 # 2)
 
 ## a)
 
 Dado que la pérdida $L \sim Exp(\lambda)$, con $\lambda = 1$, entonces su
-función de densidad está dada por $f_L(L) = e^{-L}$, y además $E[L] = \int_{0}^{\infty} L \cdot f_L(L) \, dL = \frac{1}{\lambda} = 1$
+función de densidad está dada por $f_L(L) = e^{-L}$, y además $E[L] = \int_{0}^{\infty} L \cdot f_L(L) \, dL = \frac{1}{\lambda} = 1$.
 
 ```{r f_L(L)}
 lambda <- 1
@@ -66,12 +86,14 @@ g_L <- rnorm(n, mean = 3, sd = 2)
 # Filtramos para asegurarnos de que las muestras sean positivas
 g_L <- g_L[g_L > 0]
 
+n <- length(g_L)
+
 # Definimos una función que calcula el valor correspondiente para cada L
-h <- Vectorize(function(L)
+f <- Vectorize(function(L)
   (L * f_L(L)) / (dnorm(L, mean = 3, sd = 2)))
 
 # Calculamos los valores de la función en los valores de la muestra
-Y <- h(g_L)
+Y <- f(g_L)
 
 # Calculamos la estimación del valor esperado
 estimacion <- mean(Y)
@@ -88,6 +110,26 @@ colnames(A) <- c("Estimación", "Valor real", "Error absoluto")
 
 A
 ```
+
+Podemos ver la convergencia en el siguiente gráfico.
+
+```{r convergencia_muestreo}
+prod_acum <- cumsum(Y) / (1:n)
+
+plot(
+  (1:n) / 1000,
+  prod_acum,
+  col = "green",
+  type = "l",
+  ylab = "Aproximación",
+  xlab = "Iteraciones (miles)"
+)
+
+abline(h = valor_esperado,
+       col = "skyblue",
+       lwd = 1)
+```
+
 
 # 3)
 
@@ -207,11 +249,9 @@ En primer lugar, hace falta definir la función correspondiente.
 f <- function(x){(sin(10 * x)) / (10 * cos(x))}
 ```
 
-
-
 ## a)
 
-En primer lugar, en el gráfico de la función se puede ver que la función tiene múltiples mínimos en el intervalo requerido.
+Seguidamente se tiene el gráfico de la función, en el cual se puede ver que la función tiene múltiples mínimos en el intervalo requerido.
 
 ```{r grafico}
 curve(f, col = "violet", lwd = 2, from = 0, to = 10, n = 1000, ylab="f(x)")
