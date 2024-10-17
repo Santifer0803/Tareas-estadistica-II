@@ -334,29 +334,138 @@ plot(Resultado$estados)
 ```
 
 
-# 5)
+# 5) 
 
 ## a)
+Como primer paso, almacenamos los datos de la muestra:
 
+```{r}
+muestra <- c(4, 2, 5, 6, 3, 4, 7, 5, 6, 4)
+```
 
+Si cada $x_i, i \in \{ 1,..10 \}$ representa la cantidad de siniestros por periodo, se sabe que $x_i \sim Poisson(\lambda)$. Es decir, su verosimilitud viene dada por:
+
+$$\prod_{i = 1}^{n} \mathbb{P}(x_i|\lambda) = \prod_{i=1}^{n}\frac{e^{-\lambda} \lambda^{x_i}}{(x_i)!} $$
+
+Establecemos asi la verosimilitud:
+
+```{r}
+verosimilitud <- Vectorize(function(lambda) {
+  prod(dpois(muestra, lambda))
+})
+```
+
+La "propuesta" para $\lambda$ es que $\lambda \sim \gamma(3,2)$. Asi, procedemos con el algoritmo de Metropolis-Hastings:
+
+```{r}
+
+simulaciones <- 10^4
+quemados <- 1000 #se usan 1000 dado que es el estandar
+
+# Matriz de resultados
+MCMC <- matrix(data = 0, nrow = simulaciones, ncol = 5)
+colnames(MCMC) <- c("x", "PIx", "PIy", "Fxy", "Salto")
+
+# Valor inicial de x
+x <- runif(1, 0, 10)
+
+for (i in 1:simulaciones) {
+  
+  y = rgamma(1,3,2)  
+  
+  PIx <- verosimilitud(x)
+  PIy <- verosimilitud(y)
+
+  Kxy = dgamma(x,3,2)  
+  Kyx = dgamma(y,3,2)  
+  
+  Rxy = (PIy*Kyx) / (PIx*Kxy)  
+  
+  Fxy <- runif(1)
+  
+  MCMC[i,] <- c(x, PIx, PIy, Fxy, 0)
+  
+  if (Fxy < Rxy) {
+    x <- y
+    lsalto <- 1
+  } else {
+    lsalto <- 0 
+  }
+  MCMC[i, 5] <- lsalto
+}
+
+mcmc <- MCMC[(quemados + 1):simulaciones, "x"]
+
+head(mcmc, 25)
+
+```
+
+Se calcula tambien la media de la muestra: 
+
+```{r}
+media <- mean(mcmc)
+print(media)
+```
 
 ## b)
+Ahora se realiza la distribución de la muestra 
+MCMC del algoritmo. 
 
+```{r}
+par(mfrow=c(2,2))
+media=mean(mcmc)
+curve(verosimilitud(x), from=1,to=3, type="l")
+abline(v=media, col='red', lwd=3)
+hist(mcmc,
+freq = FALSE,
+main = "Distribucion de muestra MCMC",
+xlab = "x",
+ylab = "distirbucion(x)",
+breaks = 200)
+abline(v=media, col='red', lwd=3)
+```
 
 
 ## c)
 
+Ahora el grafico Traceplot
+```{r}
+plot(mcmc,type="l",xlab = "x", ylab = "y", main = "Traceplot de muestra MCMC")
+abline(h=media, col='violet', lwd=3)
+
+```
 
 
 ## d)
 
+Ahora el grafico de autocorrelacion
+
+```{r}
+acf(mcmc,main = "Autocorrelacion de muestra MCMC")
+
+```
 
 
 ## e)
 
+Ahora el gráfico de la convergencia (promedios 
+ergódicos) de la media de la muestra MCMC del algoritmo. 
+
+```{r}
+par(mfrow=c(1,1))
+m = simulaciones - quemados
+acumulado <- cumsum(mcmc) / (1:m) # media acumulada
+plot(1:m, acumulado, col="blue", type="l", ylab="promedio", xlab="Iteraciones")
+```
 
 
 ## f)
+
+Y finalmente, se calcula la tasa de aceptacion del algoritmo
+```{r}
+cat("Tasa de aceptacion \n", "NumeroSaltos/TotalIteraciones :", mean(MCMC[,"Salto"]), "\n")
+```
+
 
 
 
