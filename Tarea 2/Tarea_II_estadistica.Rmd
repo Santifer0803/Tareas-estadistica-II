@@ -337,6 +337,7 @@ resim <- function(f,
 Se estima el mínimo usando el algoritmo anterior.
 
 ```{r minimo}
+set.seed(54321)
 Resultado <- resim(f, 0.1, 5, 1000, 0, 10)
 cat("El mínimo de la función f en [0, 10] es: ", Resultado$minimo)
 ```
