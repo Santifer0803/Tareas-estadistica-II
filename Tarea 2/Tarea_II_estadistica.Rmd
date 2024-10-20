@@ -2,7 +2,9 @@
 title: "Tarea_II_estadistica"
 author: "Alejandro Brenes (C21319), Santiago Fernández (C22943), Eyeri Méndez (C24765)"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # 1)
@@ -157,7 +159,7 @@ emv <- optimize(lik , int = range(muestra), maximum = TRUE)
 c <- emv$objective
 ```
 
-Para asegurarnos que el algoritmo será eficaz, se tiene el siguiente gráfico.
+Para asegurarnos que el algoritmo será eficaz, se tiene el siguiente gráfico, en el cual se observa que la función punteada recubre casi completamente a la otra (no la recubre completamente, probablemente, debido a que se toma una muestra pequeña).
 
 ```{r grafico_fun}
 f.cuasi <- function(lambda)
@@ -167,7 +169,7 @@ curve(
   xlim = c(0, 4),
   ylim = c(0, c / 2),
   lty = 2,
-  xlab = "mu",
+  xlab = "lambda",
   ylab = "cuasi-densidad"
 )
 curve(f.cuasi, add = TRUE)
