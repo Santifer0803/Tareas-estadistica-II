@@ -389,13 +389,13 @@ colnames(MCMC) <- c("x", "PIx", "PIy", "Fxy", "Salto")
 x <- runif(1, 0, 10)
 
 for (i in 1:simulaciones) {
-  y = rgamma(1, 3, 2)
+  y = rgamma(1, 3, 0.5)
   
   PIx <- verosimilitud(x)
   PIy <- verosimilitud(y)
   
-  Kxy = dgamma(x, 3, 2)
-  Kyx = dgamma(y, 3, 2)
+  Kxy = dgamma(x, 3, 0.5)
+  Kyx = dgamma(y, 3, 0.5)
   
   Rxy = (PIy * Kyx) / (PIx * Kxy)
   
